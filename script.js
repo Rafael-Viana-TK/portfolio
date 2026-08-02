@@ -121,16 +121,31 @@ function typeWriter() {
 setTimeout(typeWriter, 800);
 
 // =========================================
-// 4. IDIOMAS E TRADUÇÃO (PT / EN)
+// 4. IDIOMAS E TRADUÇÃO (PT / EN) COM DETECÇÃO AUTOMÁTICA
 // =========================================
 let currentLang = 'pt';
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-function setLanguage(lang) {
+function updateVisitCountersText() {
+    const personal = localStorage.getItem('rafael_portfolio_personal_visits') || 1;
+    const total = localStorage.getItem('rafael_portfolio_total_visits') || personal;
+    
+    const visitContainer = document.getElementById('visit-text-container');
+    if (visitContainer) {
+        const textTemplate = visitContainer.getAttribute(`data-${currentLang}`);
+        visitContainer.innerHTML = textTemplate
+            .replace("<span id='personal-visits' class='highlight'>1</span>", `<span id='personal-visits' class='highlight'>${personal}</span>`)
+            .replace("<span id='total-visits' class='highlight'>1</span>", `<span id='total-visits' class='highlight'>${total}</span>`);
+    }
+}
+
+function setLanguage(lang, saveUserChoice = false) {
     currentLang = lang;
     document.querySelectorAll('[data-pt]').forEach(el => {
-        el.innerHTML = el.getAttribute(`data-${lang}`);
+        if (el.id !== 'visit-text-container') {
+            el.innerHTML = el.getAttribute(`data-${lang}`);
+        }
     });
     
     textToType = (lang === 'pt') ? "Desenvolvedor de Software" : "Software Developer";
@@ -138,20 +153,36 @@ function setLanguage(lang) {
         typingElement.innerHTML = textToType + '<span class="cursor">_</span>';
     }
 
+    updateVisitCountersText();
     renderAllTrees();
+
+    if (lang === 'en') {
+        btnEn.classList.add('active');
+        btnPt.classList.remove('active');
+    } else {
+        btnPt.classList.add('active');
+        btnEn.classList.remove('active');
+    }
+
+    if (saveUserChoice) {
+        localStorage.setItem('rafael_portfolio_user_lang', lang);
+    }
 }
 
-btnPt.addEventListener('click', () => {
-    btnPt.classList.add('active');
-    btnEn.classList.remove('active');
-    setLanguage('pt');
-});
+btnPt.addEventListener('click', () => setLanguage('pt', true));
+btnEn.addEventListener('click', () => setLanguage('en', true));
 
-btnEn.addEventListener('click', () => {
-    btnEn.classList.add('active');
-    btnPt.classList.remove('active');
-    setLanguage('en');
-});
+const savedUserLang = localStorage.getItem('rafael_portfolio_user_lang');
+if (savedUserLang) {
+    setLanguage(savedUserLang, false);
+} else {
+    const browserLang = navigator.language || navigator.userLanguage || 'pt';
+    if (browserLang.toLowerCase().startsWith('pt')) {
+        setLanguage('pt', false);
+    } else {
+        setLanguage('en', false);
+    }
+}
 
 // =========================================
 // 5. MODAL DE SKILLS
@@ -372,10 +403,32 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Ação do ícone de retorno ao topo no rodapé
-const footerScrollIcon = document.querySelector('.footer-scroll-icon');
-if (footerScrollIcon) {
-    footerScrollIcon.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+// =========================================
+// 8. CONTADOR DE VISITAS REAL (PESSOAL + TOTAL)
+// =========================================
+function initVisitCounters() {
+    let personalVisits = localStorage.getItem('rafael_portfolio_personal_visits');
+    if (!personalVisits) {
+        personalVisits = 1;
+    } else {
+        personalVisits = parseInt(personalVisits) + 1;
+    }
+    localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
+
+    fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
+        .then(response => response.json())
+        .then(data => {
+            let totalVisits = data && data.count ? data.count : personalVisits;
+            localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
+            updateVisitCountersText();
+        })
+        .catch(() => {
+            let totalVisits = localStorage.getItem('rafael_portfolio_total_visits');
+            if (!totalVisits) {
+                totalVisits = personalVisits;
+            }
+            updateVisitCountersText();
+        });
 }
+
+initVisitCounters();
