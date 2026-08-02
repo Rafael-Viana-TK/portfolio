@@ -154,6 +154,7 @@ function setLanguage(lang, saveUserChoice = false) {
     }
 
     updateVisitCountersText();
+    updateUptime();
     renderAllTrees();
 
     if (lang === 'en') {
@@ -404,7 +405,44 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 8. CONTADOR DE VISITAS REAL (PESSOAL + TOTAL)
+// 8. CONTADOR DE TEMPO DE ATUALIZAÇÃO EM TEMPO REAL (INICIA EM 0s)
+// =========================================
+let secondsElapsed = parseInt(sessionStorage.getItem('portfolio_uptime')) || 0;
+
+function updateUptime() {
+    secondsElapsed++;
+    sessionStorage.setItem('portfolio_uptime', secondsElapsed);
+
+    let timeStringPt = "";
+    let timeStringEn = "";
+
+    if (secondsElapsed < 60) {
+        timeStringPt = `há ${secondsElapsed} segundo${secondsElapsed === 1 ? '' : 's'}`;
+        timeStringEn = `${secondsElapsed} second${secondsElapsed === 1 ? '' : 's'} ago`;
+    } else if (secondsElapsed < 3600) {
+        let mins = Math.floor(secondsElapsed / 60);
+        timeStringPt = `há ${mins} minuto${mins === 1 ? '' : 's'}`;
+        timeStringEn = `${mins} minute${mins === 1 ? '' : 's'} ago`;
+    } else {
+        let hours = Math.floor(secondsElapsed / 3600);
+        timeStringPt = `há ${hours} hora${hours === 1 ? '' : 's'}`;
+        timeStringEn = `${hours} hour${hours === 1 ? '' : 's'} ago`;
+    }
+
+    const uptimeEl = document.getElementById('uptime-text');
+    if (uptimeEl) {
+        if (currentLang === 'pt') {
+            uptimeEl.textContent = `Última atualização: ${timeStringPt}`;
+        } else {
+            uptimeEl.textContent = `Last update: ${timeStringEn}`;
+        }
+    }
+}
+
+setInterval(updateUptime, 1000);
+
+// =========================================
+// 9. CONTADOR DE VISITAS REAL (PESSOAL + TOTAL)
 // =========================================
 function initVisitCounters() {
     let personalVisits = localStorage.getItem('rafael_portfolio_personal_visits');
@@ -431,4 +469,18 @@ function initVisitCounters() {
         });
 }
 
+function updateVisitCountersText() {
+    const personal = localStorage.getItem('rafael_portfolio_personal_visits') || 1;
+    const total = localStorage.getItem('rafael_portfolio_total_visits') || personal;
+    
+    const visitContainer = document.getElementById('visit-text-container');
+    if (visitContainer) {
+        const textTemplate = visitContainer.getAttribute(`data-${currentLang}`);
+        visitContainer.innerHTML = textTemplate
+            .replace("<span id='personal-visits' class='highlight'>1</span>", `<span id='personal-visits' class='highlight'>${personal}</span>`)
+            .replace("<span id='total-visits' class='highlight'>1</span>", `<span id='total-visits' class='highlight'>${total}</span>`);
+    }
+}
+
 initVisitCounters();
+updateUptime();
