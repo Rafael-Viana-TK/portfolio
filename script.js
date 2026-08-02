@@ -267,11 +267,11 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-let globalServerVisits = 150; // Valor padrão inicial seguro
+let globalServerVisits = 150;
 
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = globalServerVisits; // Total global unificado direto do servidor
+    let total = globalServerVisits;
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -349,7 +349,6 @@ window.addEventListener('scroll', () => {
 // =========================================
 // 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLE DE DEPLOY)
 // =========================================
-// Altere apenas esta data/hora exata sempre que fizer um deploy novo:
 const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00';
 
 function updateDeployUptime() {
@@ -396,15 +395,15 @@ updateDeployUptime();
 setInterval(updateDeployUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS (PESSOAL LOCAL + GLOBAL DO SERVIDOR)
+// 10. CONTADOR DE VISITAS (INCREMENTA A CADA F5/ACESSO E SINCRONIZA O GLOBAL)
 // =========================================
 function initVisitCounters() {
-    // Conta apenas as entradas deste navegador específico
+    // Incrementa o contador pessoal local deste navegador a cada carregamento/F5
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Puxa o total unificado do servidor global
+    // Incrementa no servidor global a cada carregamento real (somando todas as requisições)
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
         .then(response => {
             if (!response.ok) {
@@ -420,7 +419,6 @@ function initVisitCounters() {
             updateVisitCountersText();
         })
         .catch(() => {
-            // Se falhar a rede, mantém o número base seguro
             updateVisitCountersText();
         });
 }
