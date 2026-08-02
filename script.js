@@ -267,9 +267,11 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
+let globalServerVisits = 150; // Valor base seguro
+
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = parseInt(localStorage.getItem('rafael_portfolio_global_total')) || (personal + 150);
+    let total = globalServerVisits;
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -345,15 +347,14 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLADO POR DEPLOY)
+// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (FORMATO NUMÉRICO BLINDADO)
 // =========================================
-// Altere esta string com a data e hora exata do seu commit/deploy:
-const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00-03:00';
+// Mês é indexado em 0: 7 = Agosto. Data: 02/08/2026 às 05:30:00.
+const ADMIN_DEPLOY_DATE = new Date(2026, 7, 2, 5, 30, 0);
 
 function updateDeployUptime() {
     const now = new Date();
-    const deployDate = new Date(ADMIN_DEPLOY_TIMESTAMP);
-    let diffMs = now - deployDate;
+    let diffMs = now - ADMIN_DEPLOY_DATE;
     if (diffMs < 0) diffMs = 0;
     
     const diffSecs = Math.floor(diffMs / 1000);
@@ -394,20 +395,37 @@ updateDeployUptime();
 setInterval(updateDeployUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS LOCAL BLINDADO (INCREMENTA EM CADA F5/ACESSO)
+// 10. CONTADOR DE VISITAS GLOBAL VIA API BLINDADA
 // =========================================
 function initVisitCounters() {
-    // Conta quantas vezes ESTE navegador entrou
+    // Conta quantas vezes ESTE navegador entrou especificamente
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Conta o total global de forma consistente somando os hits
-    let globalTotal = parseInt(localStorage.getItem('rafael_portfolio_global_total')) || 150;
-    globalTotal++;
-    localStorage.setItem('rafael_portfolio_global_total', globalTotal);
-
-    updateVisitCountersText();
+    // Puxa e incrementa o total unificado do servidor global
+    fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
+        .then(response => {
+            if (!response.ok) {
+                return fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio', { method: 'PUT' })
+                    .then(() => fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up').then(r => r.json()));
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.count) {
+                globalServerVisits = data.count;
+            }
+            updateVisitCountersText();
+        })
+        .catch(() => {
+            // Fallback caso a API caia: usa o localStorage compartilhado de forma segura
+            let fallbackTotal = parseInt(localStorage.getItem('rafael_portfolio_fallback_total')) || 176;
+            fallbackTotal++;
+            localStorage.setItem('rafael_portfolio_fallback_total', fallbackTotal);
+            globalServerVisits = fallbackTotal;
+            updateVisitCountersText();
+        });
 }
 
 initVisitCounters();
