@@ -28,7 +28,6 @@
                 <a href="#about" data-pt="Sobre" data-en="About">Sobre</a>
                 <a href="#skills" data-pt="Skills" data-en="Skills">Skills</a>
                 <a href="#projects" data-pt="Projetos" data-en="Projects">Projetos</a>
-                <a href="#contact" data-pt="Contato" data-en="Contact">Contato</a>
             </nav>
             
             <div class="header-actions">
@@ -205,47 +204,43 @@
         </div>
     </section>
 
-    <!--================ CONTATO ================-->
-    <section id="contact" class="section">
-        <div class="container">
-            <h2 data-pt="Contato" data-en="Contact">Contato</h2>
-            <div class="contact-links">
-                <a target="_blank" href="https://github.com/Rafael-Viana-TK">
+    <!--================ FOOTER REESTRUTURADO EM 3 PARTES ================-->
+    <footer>
+        <!-- 1. CANTO ESQUERDO: GitHub, LinkedIn, Instagram + Compre-me um café -->
+        <div class="footer-left">
+            <div class="footer-contact-links">
+                <a target="_blank" href="https://github.com/Rafael-Viana-TK" class="footer-btn">
                     <i class="fab fa-github"></i> GitHub
                 </a>
-                <a target="_blank" href="https://www.linkedin.com/in/rafael-viana-padilha">
+                <a target="_blank" href="https://www.linkedin.com/in/rafael-viana-padilha" class="footer-btn">
                     <i class="fab fa-linkedin"></i> LinkedIn
                 </a>
-                <a target="_blank" href="https://www.instagram.com/faelviana021?igsh=MXY1ODhlNjNnNmFxbQ==">
+                <a target="_blank" href="https://www.instagram.com/faelviana021?igsh=MXY1ODhlNjNnNmFxbQ==" class="footer-btn">
                     <i class="fab fa-instagram"></i> Instagram
+                </a>
+                <a href="https://www.buymeacoffee.com/RafaelTK" target="_blank" class="bmc-footer-btn">
+                    <img src="https://img.buymeacoffee.com/button-api/?text=Compre-me um café&emoji=⚡&slug=RafaelTK&button_colour=fafafa&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me a Coffee" />
                 </a>
             </div>
         </div>
-    </section>
 
-    <!--================ FOOTER COMPACTO COM CONTATO E STATS ================-->
-    <footer>
-        <!-- Esquerda: Links de Contato Compactos -->
-        <div class="footer-left">
+        <!-- 2. MEIO: Apenas o Copyright -->
+        <div class="footer-center">
             <span class="footer-copy" data-pt="© 2026 CODINOME TK" data-en="© 2026 CODENAME TK">© 2026 CODINOME TK</span>
-            <div class="footer-socials">
-                <a target="_blank" href="https://github.com/Rafael-Viana-TK" title="GitHub"><i class="fab fa-github"></i></a>
-                <a target="_blank" href="https://www.linkedin.com/in/rafael-viana-padilha" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a target="_blank" href="https://www.instagram.com/faelviana021?igsh=MXY1ODhlNjNnNmFxbQ==" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a target="_blank" href="https://www.buymeacoffee.com/RafaelTK" class="bmc-footer-btn"><img src="https://img.buymeacoffee.com/button-api/?text=Compre-me um café&emoji=⚡&slug=RafaelTK&button_colour=fafafa&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me a Coffee" /></a>
-            </div>
         </div>
 
-        <!-- Direita: Estatísticas Sutis -->
-        <div class="footer-stats">
-            <p><em id="uptime-text">Última atualização: há 0 segundos</em></p>
-            <p>
-                <em id="visit-text-container" 
-                    data-pt="Você visitou este portfólio <span id='personal-visits' class='highlight'>1</span> vezes de <span id='total-visits' class='highlight'>1</span> visitas totais." 
-                    data-en="You visited this portfolio <span id='personal-visits' class='highlight'>1</span> times out of <span id='total-visits' class='highlight'>1</span> total visits.">
-                    Você visitou este portfólio <span id="personal-visits" class="highlight">1</span> vezes de <span id="total-visits" class="highlight">1</span> visitas totais.
-                </em>
-            </p>
+        <!-- 3. CANTO DIREITO: Estatísticas (Atualização e Visitas) -->
+        <div class="footer-right">
+            <div class="footer-stats">
+                <p><em id="uptime-text">Última atualização: há 0 segundos</em></p>
+                <p>
+                    <em id="visit-text-container" 
+                        data-pt="Você visitou este portfólio <span id='personal-visits' class='highlight'>1</span> vezes de <span id='total-visits' class='highlight'>1</span> visitas totais." 
+                        data-en="You visited this portfolio <span id='personal-visits' class='highlight'>1</span> times out of <span id='total-visits' class='highlight'>1</span> total visits.">
+                        Você visitou este portfólio <span id="personal-visits" class="highlight">1</span> vezes de <span id="total-visits" class="highlight">1</span> visitas totais.
+                    </em>
+                </p>
+            </div>
         </div>
     </footer>
 
