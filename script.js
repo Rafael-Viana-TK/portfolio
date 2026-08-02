@@ -271,7 +271,7 @@ let globalVisitsCache = 1;
 
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = globalVisitsCache > personal ? globalVisitsCache : personal;
+    let total = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (globalVisitsCache > personal ? globalVisitsCache : personal);
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -303,7 +303,7 @@ function setLanguage(lang, saveUserChoice = false) {
     }
 
     updateVisitCountersText();
-    updateRealUptime();
+    updateAutomaticUptime();
 
     if (btnEn && btnPt) {
         if (lang === 'en') {
@@ -347,13 +347,14 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO REAL DESDE A ÚLTIMA ATUALIZAÇÃO
+// 9. TEMPO AUTOMÁTICO DESDE O ÚLTIMO DEPLOY (BASEADO NA DATA DO ARQUIVO)
 // =========================================
-const lastUpdateTimestamp = new Date('2026-08-02T17:30:00'); 
+const lastUpdateTimestamp = new Date(document.lastModified); 
 
-function updateRealUptime() {
+function updateAutomaticUptime() {
     const now = new Date();
-    const diffMs = now - lastUpdateTimestamp;
+    let diffMs = now - lastUpdateTimestamp;
+    if (diffMs < 0) diffMs = 0;
     
     const diffSecs = Math.floor(diffMs / 1000);
     const diffMins = Math.floor(diffSecs / 60);
@@ -389,11 +390,11 @@ function updateRealUptime() {
     }
 }
 
-updateRealUptime();
-setInterval(updateRealUptime, 30000);
+updateAutomaticUptime();
+setInterval(updateAutomaticUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS
+// 10. CONTADOR DE VISITAS POR APARELHO (PESSOAL + GLOBAL)
 // =========================================
 function initVisitCounters() {
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
@@ -405,11 +406,14 @@ function initVisitCounters() {
         .then(data => {
             if (data && data.count) {
                 globalVisitsCache = data.count;
+                let totalVisits = globalVisitsCache > personalVisits ? globalVisitsCache : personalVisits;
+                localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
             }
             updateVisitCountersText();
         })
         .catch(() => {
-            globalVisitsCache = personalVisits + 50; 
+            let totalVisits = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (personalVisits + 50);
+            globalVisitsCache = totalVisits;
             updateVisitCountersText();
         });
 }
