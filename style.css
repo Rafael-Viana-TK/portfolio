@@ -1,5 +1,5 @@
 /* =========================================================
-   Rafael Viana Portfolio - Transparent & Scroll-Driven Master Tree
+   Rafael Viana Portfolio - Transparent & Interactive Master Tree
    ========================================================= */
 
 :root {
@@ -105,7 +105,7 @@ img { display: block; max-width: 100%; }
 .theme-btn:hover { color: var(--accent); border-color: var(--border); background: var(--card); }
 
 /* HERO */
-.hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
+.hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; position: relative; }
 .hero-container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 
 .small-title {
@@ -191,7 +191,7 @@ img { display: block; max-width: 100%; }
 .skill-card span { font-weight: 600; color: var(--text-title); }
 
 /* =========================================
-   ÁRVORE GENEALÓGICA MESTRE COM LINHA CONECTADA AO SCROLL
+   ÁRVORE GENEALÓGICA MESTRE COM EXPANSÃO E ÍCONES CLICÁVEIS
    ========================================= */
 .master-tree-container {
   position: relative;
@@ -244,6 +244,7 @@ img { display: block; max-width: 100%; }
   background: rgba(30, 30, 30, 0.65);
   transition: 0.3s;
   position: relative;
+  user-select: none;
 }
 
 .light-theme .accordion-header {
@@ -280,7 +281,7 @@ img { display: block; max-width: 100%; }
   align-items: center;
   justify-content: center;
   color: var(--accent);
-  transition: 0.3s;
+  transition: transform 0.4s ease;
 }
 
 .accordion-item.active .accordion-badge {
@@ -299,7 +300,7 @@ img { display: block; max-width: 100%; }
 }
 
 .accordion-item.active .accordion-body {
-  max-height: 1500px;
+  max-height: 2000px;
   padding: 30px 25px;
 }
 
@@ -365,9 +366,20 @@ img { display: block; max-width: 100%; }
 
 .node-techs {
   display: flex;
-  gap: 12px;
+  gap: 15px;
   margin-bottom: 10px;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+}
+
+/* ÍCONES DE TECNOLOGIA CLICÁVEIS DENTRO DA ÁRVORE DE PROJETOS */
+.node-techs [data-skill] {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.node-techs [data-skill]:hover {
+  transform: scale(1.35);
+  filter: drop-shadow(0 0 8px var(--accent));
 }
 
 .node-desc {
@@ -377,7 +389,7 @@ img { display: block; max-width: 100%; }
 }
 
 /* =========================================
-   FOOTER REORGANIZADO EM 3 PARTES
+   FOOTER EM 3 PARTES
    ========================================= */
 footer { 
   padding: 30px 5%; 
