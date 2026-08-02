@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafael Viana | Software Developer</title>
+    <meta name="description" content="Portfólio de Rafael Viana Padilha">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- BACKGROUND ANIMADO (REDE NEURAL CONECTADA) -->
+    <canvas id="network-canvas"></canvas>
+
+    <!--================ HEADER ================-->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <span>TK</span>
+            </a>
+            
+            <nav class="menu">
+                <a href="#about" data-pt="Sobre" data-en="About">Sobre</a>
+                <a href="#skills" data-pt="Skills" data-en="Skills">Skills</a>
+                <a href="#projects" data-pt="Projetos" data-en="Projects">Projetos</a>
+                <a href="#contact" data-pt="Contato" data-en="Contact">Contato</a>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="language">
+                    <button id="pt" class="active">PT 🇧🇷</button>
+                    <button id="en">EN 🇺🇸</button>
+                </div>
+                <!-- Botão de Tema -->
+                <button id="theme-toggle" class="theme-btn" aria-label="Mudar tema">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!--================ HERO ================-->
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-text">
+                <span class="small-title" data-pt="Olá, eu sou" data-en="Hello, I am">Olá, eu sou</span>
+                <h1>Rafael Viana</h1>
+                <h2 id="typing"></h2>
+                
+                <p data-pt="Desenvolvedor apaixonado por tecnologia, criando soluções modernas, interfaces elegantes e aplicações web." 
+                   data-en="Developer passionate about technology, creating modern solutions, elegant interfaces, and web applications.">
+                    Desenvolvedor apaixonado por tecnologia, criando soluções modernas,
+                    interfaces elegantes e aplicações web.
+                </p>
+                
+                <div class="hero-buttons">
+                    <a target="_blank" href="https://github.com/Rafael-Viana-TK" class="btn">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/rafael-viana-padilha" class="btn btn-outline">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a target="_blank" href="https://www.instagram.com/faelviana021?igsh=MXY1ODhlNjNnNmFxbQ==" class="btn btn-outline">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="image-box">
+                    <img src="https://github.com/Rafael-Viana-TK.png" alt="Rafael Viana">
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll">
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!--================ SOBRE ================-->
+    <section id="about" class="section">
+        <div class="container terminal-card">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <div class="terminal-body">
+                <h2 data-pt="Sobre Mim" data-en="About Me">Sobre Mim</h2>
+                <p data-pt="<span class='highlight'>Sou obcecado por computadores</span> e desenvolvimento. Atualmente estou construindo minha carreira como Desenvolvedor Full Stack. Meu foco é criar aplicações modernas, rápidas, intuitivas e profissionais."
+                   data-en="<span class='highlight'>I am obsessed with computers</span> and development. Currently building my career as a Full Stack Developer. My focus is creating modern, fast, intuitive, and professional applications.">
+                    <span class="highlight">Sou obcecado por computadores</span> e desenvolvimento. 
+                    Atualmente estou construindo minha carreira como Desenvolvedor Full Stack.
+                    Meu foco é criar aplicações modernas, rápidas, intuitivas e profissionais.
+                </p>
+                <p data-pt="Estou sempre aprendendo novas tecnologias, desenvolvendo projetos reais e evoluindo constantemente. Na verdade, <span class='highlight'>resolver problemas</span> não é tão difícil quanto as pessoas dizem, contanto que você tenha a lógica certa."
+                   data-en="I am always learning new technologies, developing real projects, and constantly evolving. Actually, <span class='highlight'>solving problems</span> isn't as hard as people say, as long as you have the right logic.">
+                    Estou sempre aprendendo novas tecnologias, desenvolvendo projetos reais
+                    e evoluindo constantemente. Na verdade, <span class="highlight">resolver problemas</span> 
+                    não é tão difícil quanto as pessoas dizem, contanto que você tenha a lógica certa.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!--================ SKILLS ================-->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 data-pt="Tecnologias" data-en="Technologies">Tecnologias</h2>
+            <div class="skills-grid">
+                <div class="skill-card" data-skill="html"><i class="fab fa-html5" style="color: #e34f26;"></i> <span>HTML5</span></div>
+                <div class="skill-card" data-skill="css"><i class="fab fa-css3-alt" style="color: #1572b6;"></i> <span>CSS3</span></div>
+                <div class="skill-card" data-skill="js"><i class="fab fa-js" style="color: #f7df1e;"></i> <span>JavaScript</span></div>
+                <div class="skill-card" data-skill="react"><i class="fab fa-react" style="color: #61dafb;"></i> <span>React</span></div>
+                <div class="skill-card" data-skill="node"><i class="fab fa-node-js" style="color: #339933;"></i> <span>Node.js</span></div>
+                <div class="skill-card" data-skill="sql"><i class="fas fa-database" style="color: #4479a1;"></i> <span>SQL</span></div>
+                <div class="skill-card" data-skill="git"><i class="fab fa-git-alt" style="color: #f05032;"></i> <span>Git</span></div>
+                <div class="skill-card" data-skill="github"><i class="fab fa-github" style="color: var(--text-title);"></i> <span>GitHub</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!--================ PROJETOS (ÁRVORE GENEALÓGICA MESTRE CONECTADA) ================-->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 data-pt="Projetos & Evolução" data-en="Projects & Evolution">Projetos & Evolução</h2>
+            <p class="section-subtitle" data-pt="Árvore genealógica unificada de projetos. Clique em qualquer galho para expandir seus módulos..." data-en="Unified project genealogical tree. Click any branch to expand its modules...">
+                Árvore genealógica unificada de projetos. Clique em qualquer galho para expandir seus módulos...
+            </p>
+            
+            <!-- MASTER TREE CONTAINER COM LINHA CONTÍNUA UNIDA -->
+            <div class="master-tree-container">
+                <div class="master-tree-line" id="master-tree-line"></div>
+                
+                <div class="projects-accordion-list">
+                    
+                    <!-- 1. Horizon Group -->
+                    <div class="accordion-item" data-project="horizon">
+                        <div class="accordion-header">
+                            <div class="node-bullet"></div>
+                            <h3>1. Horizon Group</h3>
+                            <div class="accordion-badge"><i class="fa-solid fa-code-branch"></i></div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="tree-branches" id="tree-horizon"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Discord Bot -->
+                    <div class="accordion-item" data-project="bot">
+                        <div class="accordion-header">
+                            <div class="node-bullet"></div>
+                            <h3 data-pt="2. Discord Bot" data-en="2. Discord Bot">2. Discord Bot</h3>
+                            <div class="accordion-badge"><i class="fa-solid fa-code-branch"></i></div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="tree-branches" id="tree-bot"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. RM Soluções 360 v1 -->
+                    <div class="accordion-item" data-project="rm_v1">
+                        <div class="accordion-header">
+                            <div class="node-bullet"></div>
+                            <h3 data-pt="3. RM Soluções 360 v1" data-en="3. RM Solutions 360 v1">3. RM Soluções 360 v1</h3>
+                            <div class="accordion-badge"><i class="fa-solid fa-code-branch"></i></div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="tree-branches" id="tree-rm_v1"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Portfólio Pessoal -->
+                    <div class="accordion-item" data-project="portfolio">
+                        <div class="accordion-header">
+                            <div class="node-bullet"></div>
+                            <h3 data-pt="4. Portfólio Pessoal" data-en="4. Personal Portfolio">4. Portfólio Pessoal</h3>
+                            <div class="accordion-badge"><i class="fa-solid fa-code-branch"></i></div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="tree-branches" id="tree-portfolio"></div>
+                        </div>
+                    </div>
+
+                    <!-- 5. RM Soluções Comerciais 360 v0.1 -->
+                    <div class="accordion-item" data-project="rm_comercial">
+                        <div class="accordion-header">
+                            <div class="node-bullet"></div>
+                            <h3 data-pt="5. RM Soluções Comerciais 360 v0.1" data-en="5. RM Commercial Solutions 360 v0.1">5. RM Soluções Comerciais 360 v0.1</h3>
+                            <div class="accordion-badge"><i class="fa-solid fa-code-branch"></i></div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="tree-branches" id="tree-rm_comercial"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--================ CONTATO ================-->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 data-pt="Contato" data-en="Contact">Contato</h2>
+            <div class="contact-links">
+                <a target="_blank" href="https://github.com/Rafael-Viana-TK">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a target="_blank" href="https://www.linkedin.com/in/rafael-viana-padilha">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a target="_blank" href="https://www.instagram.com/faelviana021?igsh=MXY1ODhlNjNnNmFxbQ==">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!--================ FOOTER ================-->
+    <footer>
+        <!-- Bloco de Estatísticas Sutis -->
+        <div class="footer-stats">
+            <p><em>Última atualização: há 684 horas</em></p>
+            <p>
+                <em id="visit-text-container" 
+                    data-pt="Você visitou este portfólio <span id='personal-visits' class='highlight'>1</span> vezes de <span id='total-visits' class='highlight'>1</span> visitas totais." 
+                    data-en="You visited this portfolio <span id='personal-visits' class='highlight'>1</span> times out of <span id='total-visits' class='highlight'>1</span> total visits.">
+                    Você visitou este portfólio <span id="personal-visits" class="highlight">1</span> vezes de <span id="total-visits" class="highlight">1</span> visitas totais.
+                </em>
+            </p>
+        </div>
+
+        <p data-pt="© 2026 CODINOME TK" data-en="© 2026 CODENAME TK">© 2026 CODINOME TK</p>
+    </footer>
+
+    <!--================ MODAL DE SKILLS ================-->
+    <div id="skill-modal" class="modal-overlay">
+        <div class="modal-content terminal-card">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <button id="close-modal" class="modal-close">&times;</button>
+            </div>
+            <div class="terminal-body modal-body">
+                <div id="modal-icon"></div>
+                <h3 id="modal-title" class="highlight"></h3>
+                <p id="modal-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
