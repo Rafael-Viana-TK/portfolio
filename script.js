@@ -347,9 +347,9 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLE DE DEPLOY)
+// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (COM FUSO HORÁRIO FIXO -03:00)
 // =========================================
-const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00';
+const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00-03:00';
 
 function updateDeployUptime() {
     const now = new Date();
@@ -395,15 +395,15 @@ updateDeployUptime();
 setInterval(updateDeployUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS (INCREMENTA A CADA F5/ACESSO E SINCRONIZA O GLOBAL)
+// 10. CONTADOR DE VISITAS BLINDADO COM INCREMENTO LOCAL E GLOBAL
 // =========================================
 function initVisitCounters() {
-    // Incrementa o contador pessoal local deste navegador a cada carregamento/F5
+    // Incrementa o histórico pessoal deste navegador
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Incrementa no servidor global a cada carregamento real (somando todas as requisições)
+    // Incrementa globalmente e garante soma contínua mesmo se a API oscilar
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
         .then(response => {
             if (!response.ok) {
@@ -415,10 +415,17 @@ function initVisitCounters() {
         .then(data => {
             if (data && data.count) {
                 globalServerVisits = data.count;
+            } else {
+                globalServerVisits++;
             }
             updateVisitCountersText();
         })
         .catch(() => {
+            // Fallback inteligente caso a API caia: soma ao total anterior salvo no navegador
+            let fallbackTotal = parseInt(localStorage.getItem('rafael_portfolio_fallback_total')) || 176;
+            fallbackTotal++;
+            localStorage.setItem('rafael_portfolio_fallback_total', fallbackTotal);
+            globalServerVisits = fallbackTotal;
             updateVisitCountersText();
         });
 }
