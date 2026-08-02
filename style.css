@@ -376,17 +376,11 @@ img { display: block; max-width: 100%; }
   line-height: 1.6;
 }
 
-/* CONTACT (SEÇÃO PRINCIPAL) */
-.contact-links { display: flex; flex-wrap: wrap; gap: 15px; }
-.contact-links a {
-  padding: 14px 24px; border-radius: 8px; background: var(--card); border: 1px solid var(--border);
-  display: inline-flex; align-items: center; gap: 10px; font-weight: 500; transition: 0.3s; backdrop-filter: blur(8px);
-}
-.contact-links a:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
-
-/* FOOTER ESTILO CLEAN COMPACTO */
+/* =========================================
+   FOOTER REORGANIZADO EM 3 PARTES
+   ========================================= */
 footer { 
-  padding: 25px 5%; 
+  padding: 30px 5%; 
   color: var(--muted); 
   border-top: 1px solid var(--border); 
   font-size: 0.85rem; 
@@ -401,64 +395,71 @@ footer {
 .footer-left {
   display: flex;
   align-items: center;
-  gap: 25px;
-  flex-wrap: wrap;
 }
 
-.footer-copy {
-  font-size: 0.85rem;
-}
-
-.footer-socials {
+.footer-contact-links {
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.footer-socials a {
-  font-size: 1.1rem;
-  color: var(--muted);
-  transition: 0.3s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+.footer-contact-links .footer-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
   background: var(--card);
   border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text);
+  transition: 0.3s;
+  backdrop-filter: blur(8px);
 }
 
-.footer-socials a:hover {
-  color: var(--accent);
+.footer-contact-links .footer-btn:hover {
   border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg2);
   transform: translateY(-2px);
 }
 
-/* Estilização para o botão personalizado do Buy Me a Coffee no Footer */
-.footer-socials a.bmc-footer-btn {
-  width: auto !important;
-  height: auto !important;
+.footer-contact-links a.bmc-footer-btn {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   border-radius: 6px !important;
 }
 
-.footer-socials a.bmc-footer-btn img {
-  height: 30px;
+.footer-contact-links a.bmc-footer-btn img {
+  height: 38px;
   border-radius: 6px;
   display: block;
   transition: 0.3s;
 }
 
-.footer-socials a.bmc-footer-btn img:hover {
+.footer-contact-links a.bmc-footer-btn img:hover {
   transform: translateY(-2px);
-  opacity: 0.9;
+  opacity: 0.95;
+}
+
+.footer-center {
+  text-align: center;
+}
+
+.footer-copy {
+  font-size: 0.95rem;
+  color: var(--text-title);
+  font-weight: 600;
+}
+
+.footer-right {
+  text-align: right;
 }
 
 .footer-stats {
-  text-align: right;
   font-size: 0.75rem;
   opacity: 0.8;
   line-height: 1.4;
@@ -515,12 +516,15 @@ footer {
   footer {
     flex-direction: column;
     text-align: center;
+    gap: 20px;
   }
-  .footer-left {
+  .footer-left, .footer-center, .footer-right {
     justify-content: center;
-  }
-  .footer-stats {
     text-align: center;
+    width: 100%;
+  }
+  .footer-contact-links {
+    justify-content: center;
   }
 }
 
