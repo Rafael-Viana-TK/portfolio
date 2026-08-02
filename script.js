@@ -271,7 +271,7 @@ let globalVisitsCache = 1;
 
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (globalVisitsCache > personal ? globalVisitsCache : personal);
+    let total = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (globalVisitsCache > personal ? globalVisitsCache : personal + 100);
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -303,8 +303,7 @@ function setLanguage(lang, saveUserChoice = false) {
     }
 
     updateVisitCountersText();
-    updateAutomaticUptime();
-
+    
     if (btnEn && btnPt) {
         if (lang === 'en') {
             btnEn.classList.add('active');
@@ -347,13 +346,12 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO AUTOMÁTICO DESDE O ÚLTIMO DEPLOY (BASEADO NA DATA DO ARQUIVO)
+// 9. TEMPO AUTOMÁTICO VIA API DO GITHUB (COMMITS)
 // =========================================
-const lastUpdateTimestamp = new Date(document.lastModified); 
-
-function updateAutomaticUptime() {
+function calculateTimeAgo(dateString) {
     const now = new Date();
-    let diffMs = now - lastUpdateTimestamp;
+    const past = new Date(dateString);
+    let diffMs = now - past;
     if (diffMs < 0) diffMs = 0;
     
     const diffSecs = Math.floor(diffMs / 1000);
@@ -390,19 +388,45 @@ function updateAutomaticUptime() {
     }
 }
 
-updateAutomaticUptime();
-setInterval(updateAutomaticUptime, 30000);
+function initAutomaticUptime() {
+    // Tenta puxar a data do último commit direto do repositório GitHub
+    fetch('https://api.github.com/repos/Rafael-Viana-TK/Rafael-Viana-TK.github.io/commits?per_page=1')
+        .then(res => res.json())
+        .then(data => {
+            if (data && data[0] && data[0].commit && data[0].commit.committer) {
+                const commitDate = data[0].commit.committer.date;
+                calculateTimeAgo(commitDate);
+            } else {
+                throw new Error();
+            }
+        })
+        .catch(() => {
+            // Fallback caso a API do GitHub demore ou bloqueie: usa a data de modificação interna
+            calculateTimeAgo(document.lastModified);
+        });
+}
+
+initAutomaticUptime();
+setInterval(initAutomaticUptime, 60000); // Atualiza a cada 1 minuto
 
 // =========================================
-// 10. CONTADOR DE VISITAS POR APARELHO (PESSOAL + GLOBAL)
+// 10. CONTADOR DE VISITAS AUTOMÁTICO COM AUTO-INICIALIZAÇÃO
 // =========================================
 function initVisitCounters() {
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
+    // Tenta incrementar na API CounterAPI
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // Se o contador não existir no servidor, cria automaticamente via PUT
+                return fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio', { method: 'PUT' })
+                    .then(() => fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up').then(r => r.json()));
+            }
+            return response.json();
+        })
         .then(data => {
             if (data && data.count) {
                 globalVisitsCache = data.count;
@@ -412,8 +436,9 @@ function initVisitCounters() {
             updateVisitCountersText();
         })
         .catch(() => {
-            let totalVisits = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (personalVisits + 50);
+            let totalVisits = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (personalVisits + 100);
             globalVisitsCache = totalVisits;
+            localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
             updateVisitCountersText();
         });
 }
