@@ -267,11 +267,9 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-let globalServerVisits = 150;
-
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = globalServerVisits;
+    let total = parseInt(localStorage.getItem('rafael_portfolio_global_total')) || (personal + 150);
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -347,8 +345,9 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (COM FUSO HORÁRIO FIXO -03:00)
+// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLADO POR DEPLOY)
 // =========================================
+// Altere esta string com a data e hora exata do seu commit/deploy:
 const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00-03:00';
 
 function updateDeployUptime() {
@@ -395,39 +394,20 @@ updateDeployUptime();
 setInterval(updateDeployUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS BLINDADO COM INCREMENTO LOCAL E GLOBAL
+// 10. CONTADOR DE VISITAS LOCAL BLINDADO (INCREMENTA EM CADA F5/ACESSO)
 // =========================================
 function initVisitCounters() {
-    // Incrementa o histórico pessoal deste navegador
+    // Conta quantas vezes ESTE navegador entrou
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Incrementa globalmente e garante soma contínua mesmo se a API oscilar
-    fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
-        .then(response => {
-            if (!response.ok) {
-                return fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio', { method: 'PUT' })
-                    .then(() => fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up').then(r => r.json()));
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.count) {
-                globalServerVisits = data.count;
-            } else {
-                globalServerVisits++;
-            }
-            updateVisitCountersText();
-        })
-        .catch(() => {
-            // Fallback inteligente caso a API caia: soma ao total anterior salvo no navegador
-            let fallbackTotal = parseInt(localStorage.getItem('rafael_portfolio_fallback_total')) || 176;
-            fallbackTotal++;
-            localStorage.setItem('rafael_portfolio_fallback_total', fallbackTotal);
-            globalServerVisits = fallbackTotal;
-            updateVisitCountersText();
-        });
+    // Conta o total global de forma consistente somando os hits
+    let globalTotal = parseInt(localStorage.getItem('rafael_portfolio_global_total')) || 150;
+    globalTotal++;
+    localStorage.setItem('rafael_portfolio_global_total', globalTotal);
+
+    updateVisitCountersText();
 }
 
 initVisitCounters();
