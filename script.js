@@ -301,7 +301,7 @@ function setLanguage(lang, saveUserChoice = false) {
     }
 
     updateVisitCountersText();
-    updateUptime();
+    updateUptimeText();
 
     if (btnEn && btnPt) {
         if (lang === 'en') {
@@ -345,14 +345,11 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. CONTADOR DE TEMPO DE ATUALIZAÇÃO (UPTIME)
+// 9. CONTADOR DE TEMPO DE ATUALIZAÇÃO (UPTIME REAL)
 // =========================================
 let secondsElapsed = parseInt(sessionStorage.getItem('portfolio_uptime')) || 0;
 
-function updateUptime() {
-    secondsElapsed++;
-    sessionStorage.setItem('portfolio_uptime', secondsElapsed);
-
+function updateUptimeText() {
     let timeStringPt = "";
     let timeStringEn = "";
 
@@ -379,8 +376,15 @@ function updateUptime() {
     }
 }
 
-updateUptime();
-setInterval(updateUptime, 1000);
+function tickUptime() {
+    secondsElapsed++;
+    sessionStorage.setItem('portfolio_uptime', secondsElapsed);
+    updateUptimeText();
+}
+
+// Atualiza imediatamente na carga e depois a cada 1 segundo
+updateUptimeText();
+setInterval(tickUptime, 1000);
 
 // =========================================
 // 10. CONTADOR DE VISITAS LOCAL SEGURO
