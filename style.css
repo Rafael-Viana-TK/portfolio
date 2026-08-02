@@ -376,7 +376,7 @@ img { display: block; max-width: 100%; }
   line-height: 1.6;
 }
 
-/* CONTACT */
+/* CONTACT (SEÇÃO PRINCIPAL) */
 .contact-links { display: flex; flex-wrap: wrap; gap: 15px; }
 .contact-links a {
   padding: 14px 24px; border-radius: 8px; background: var(--card); border: 1px solid var(--border);
@@ -384,27 +384,84 @@ img { display: block; max-width: 100%; }
 }
 .contact-links a:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
 
-/* FOOTER */
+/* FOOTER ESTILO CLEAN COMPACTO */
 footer { 
-  text-align: center; 
-  padding: 40px 20px 30px; 
+  padding: 25px 5%; 
   color: var(--muted); 
   border-top: 1px solid var(--border); 
-  font-size: 0.9rem; 
+  font-size: 0.85rem; 
   font-family: var(--font-code); 
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  gap: 15px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-size: 0.85rem;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.footer-socials a {
+  font-size: 1.1rem;
+  color: var(--muted);
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.footer-socials a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Estilização para o botão personalizado do Buy Me a Coffee no Footer */
+.footer-socials a.bmc-footer-btn {
+  width: auto !important;
+  height: auto !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 6px !important;
+}
+
+.footer-socials a.bmc-footer-btn img {
+  height: 30px;
+  border-radius: 6px;
+  display: block;
+  transition: 0.3s;
+}
+
+.footer-socials a.bmc-footer-btn img:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
 }
 
 .footer-stats {
-  font-family: var(--font-code);
-  font-size: 0.8rem;
-  color: var(--muted);
-  opacity: 0.75;
-  line-height: 1.5;
-  transition: opacity 0.3s;
+  text-align: right;
+  font-size: 0.75rem;
+  opacity: 0.8;
+  line-height: 1.4;
 }
 
 .footer-stats:hover {
@@ -444,7 +501,7 @@ footer {
 @media(max-width: 992px) {
   .hero-container { 
     display: flex;
-    flex-direction: column-reverse; /* Foto primeiro, texto depois no mobile */
+    flex-direction: column-reverse;
     gap: 40px;
     text-align: center; 
   }
@@ -453,6 +510,20 @@ footer {
   .image-box { margin: 0 auto; width: 280px; height: 280px; }
   .menu { display: none; }
 }
+
+@media(max-width: 768px) {
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-left {
+    justify-content: center;
+  }
+  .footer-stats {
+    text-align: center;
+  }
+}
+
 @media(max-width: 600px) {
   .hero h1 { font-size: 2.5rem; }
   .section { padding: 60px 0; }
