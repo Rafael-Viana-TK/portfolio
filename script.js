@@ -267,9 +267,11 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
+let globalVisitsCache = 1;
+
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || personal;
+    let total = globalVisitsCache > personal ? globalVisitsCache : personal;
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -301,7 +303,7 @@ function setLanguage(lang, saveUserChoice = false) {
     }
 
     updateVisitCountersText();
-    updateUptimeText();
+    updateRealUptime();
 
     if (btnEn && btnPt) {
         if (lang === 'en') {
@@ -345,25 +347,36 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. CONTADOR DE TEMPO DE ATUALIZAÇÃO (UPTIME REAL)
+// 9. TEMPO REAL DESDE A ÚLTIMA ATUALIZAÇÃO
 // =========================================
-let secondsElapsed = parseInt(sessionStorage.getItem('portfolio_uptime')) || 0;
+const lastUpdateTimestamp = new Date('2026-08-02T17:30:00'); 
 
-function updateUptimeText() {
+function updateRealUptime() {
+    const now = new Date();
+    const diffMs = now - lastUpdateTimestamp;
+    
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
     let timeStringPt = "";
     let timeStringEn = "";
 
-    if (secondsElapsed < 60) {
-        timeStringPt = `há ${secondsElapsed} segundo${secondsElapsed === 1 ? '' : 's'}`;
-        timeStringEn = `${secondsElapsed} second${secondsElapsed === 1 ? '' : 's'} ago`;
-    } else if (secondsElapsed < 3600) {
-        let mins = Math.floor(secondsElapsed / 60);
-        timeStringPt = `há ${mins} minuto${mins === 1 ? '' : 's'}`;
-        timeStringEn = `${mins} minute${mins === 1 ? '' : 's'} ago`;
+    if (diffDays > 0) {
+        const remHours = diffHours % 24;
+        timeStringPt = `há ${diffDays} dia${diffDays === 1 ? '' : 's'} e ${remHours} hora${remHours === 1 ? '' : 's'}`;
+        timeStringEn = `${diffDays} day${diffDays === 1 ? '' : 's'} and ${remHours} hour${remHours === 1 ? '' : 's'} ago`;
+    } else if (diffHours > 0) {
+        const remMins = diffMins % 60;
+        timeStringPt = `há ${diffHours} hora${diffHours === 1 ? '' : 's'} e ${remMins} minuto${remMins === 1 ? '' : 's'}`;
+        timeStringEn = `${diffHours} hour${diffHours === 1 ? '' : 's'} and ${remMins} minute${remMins === 1 ? '' : 's'} ago`;
+    } else if (diffMins > 0) {
+        timeStringPt = `há ${diffMins} minuto${diffMins === 1 ? '' : 's'}`;
+        timeStringEn = `${diffMins} minute${diffMins === 1 ? '' : 's'} ago`;
     } else {
-        let hours = Math.floor(secondsElapsed / 3600);
-        timeStringPt = `há ${hours} hora${hours === 1 ? '' : 's'}`;
-        timeStringEn = `${hours} hour${hours === 1 ? '' : 's'} ago`;
+        timeStringPt = `há poucos segundos`;
+        timeStringEn = `a few seconds ago`;
     }
 
     const uptimeEl = document.getElementById('uptime-text');
@@ -376,30 +389,29 @@ function updateUptimeText() {
     }
 }
 
-function tickUptime() {
-    secondsElapsed++;
-    sessionStorage.setItem('portfolio_uptime', secondsElapsed);
-    updateUptimeText();
-}
-
-// Atualiza imediatamente na carga e depois a cada 1 segundo
-updateUptimeText();
-setInterval(tickUptime, 1000);
+updateRealUptime();
+setInterval(updateRealUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS LOCAL SEGURO
+// 10. CONTADOR DE VISITAS
 // =========================================
 function initVisitCounters() {
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
-    let totalVisits = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || 0;
-
     personalVisits++;
-    totalVisits++;
-
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
-    localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
 
-    updateVisitCountersText();
+    fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.count) {
+                globalVisitsCache = data.count;
+            }
+            updateVisitCountersText();
+        })
+        .catch(() => {
+            globalVisitsCache = personalVisits + 50; 
+            updateVisitCountersText();
+        });
 }
 
 initVisitCounters();
