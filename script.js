@@ -379,7 +379,6 @@ function updateUptime() {
     }
 }
 
-// Inicia o relógio imediatamente e depois a cada 1 segundo
 updateUptime();
 setInterval(updateUptime, 1000);
 
