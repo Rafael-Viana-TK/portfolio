@@ -267,11 +267,9 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-let globalVisitsCache = 245; // Base global inicial simulada caso a API externe instabilidade
-
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = parseInt(localStorage.getItem('rafael_portfolio_total_global')) || (globalVisitsCache + personal);
+    let total = parseInt(localStorage.getItem('rafael_portfolio_total_global')) || (personal + 150);
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -347,9 +345,9 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLADO POR DEPLOY)
+// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLE DE DEPLOY)
 // =========================================
-// -> Altere apenas esta data/hora no formato 'YYYY-MM-DDTHH:mm:ss' sempre que subir um update novo para o GitHub:
+// Altere apenas esta data/hora exata sempre que subir uma atualização nova:
 const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00';
 
 function updateDeployUptime() {
@@ -396,15 +394,15 @@ updateDeployUptime();
 setInterval(updateDeployUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS SEPARADO (PESSOAL + GLOBAL REAL)
+// 10. CONTADOR DE VISITAS BLINDADO
 // =========================================
 function initVisitCounters() {
-    // Conta apenas as entradas deste aparelho específico
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Puxa e incrementa o total global unificado de todos os usuários
+    let totalGlobal = parseInt(localStorage.getItem('rafael_portfolio_total_global')) || (150 + personalVisits);
+    
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
         .then(response => {
             if (!response.ok) {
@@ -415,14 +413,14 @@ function initVisitCounters() {
         })
         .then(data => {
             if (data && data.count) {
-                globalVisitsCache = data.count;
-                localStorage.setItem('rafael_portfolio_total_global', globalVisitsCache);
+                totalGlobal = data.count > personalVisits ? data.count : (totalGlobal + 1);
+                localStorage.setItem('rafael_portfolio_total_global', totalGlobal);
             }
             updateVisitCountersText();
         })
         .catch(() => {
-            let savedTotal = parseInt(localStorage.getItem('rafael_portfolio_total_global')) || (globalVisitsCache + personalVisits);
-            localStorage.setItem('rafael_portfolio_total_global', savedTotal);
+            totalGlobal++;
+            localStorage.setItem('rafael_portfolio_total_global', totalGlobal);
             updateVisitCountersText();
         });
 }
