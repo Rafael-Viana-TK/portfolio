@@ -384,7 +384,7 @@ img { display: block; max-width: 100%; }
 }
 .contact-links a:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
 
-/* FOOTER COM SETA ACIMA DO TEXTO */
+/* FOOTER */
 footer { 
   text-align: center; 
   padding: 40px 20px 30px; 
@@ -398,22 +398,17 @@ footer {
   gap: 15px;
 }
 
-.footer-scroll-icon {
-  color: var(--accent);
-  font-size: 1.2rem;
-  animation: bounceUp 2s infinite;
-  cursor: pointer;
-  transition: 0.3s;
+.footer-stats {
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  color: var(--muted);
+  opacity: 0.75;
+  line-height: 1.5;
+  transition: opacity 0.3s;
 }
 
-.footer-scroll-icon:hover {
-  color: var(--text-title);
-  transform: translateY(-3px);
-}
-
-@keyframes bounceUp {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+.footer-stats:hover {
+  opacity: 1;
 }
 
 .scroll { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; color: var(--muted); }
@@ -447,7 +442,12 @@ footer {
 #modal-title { margin-bottom: 10px; font-size: 1.5rem; }
 
 @media(max-width: 992px) {
-  .hero-container { grid-template-columns: 1fr; text-align: center; }
+  .hero-container { 
+    display: flex;
+    flex-direction: column-reverse; /* Foto primeiro, texto depois no mobile */
+    gap: 40px;
+    text-align: center; 
+  }
   .hero p { margin: 0 auto 20px; }
   .hero-buttons { justify-content: center; }
   .image-box { margin: 0 auto; width: 280px; height: 280px; }
