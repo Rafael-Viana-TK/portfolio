@@ -1,4 +1,9 @@
 // =========================================
+// 0. VARIÁVEL DE IDIOMA GLOBAL (DEFINIDA PRIMEIRO)
+// =========================================
+let currentLang = 'pt';
+
+// =========================================
 // 1. ANIMAÇÃO DE REDE NEURAL NO CANVAS
 // =========================================
 const canvas = document.getElementById('network-canvas');
@@ -214,37 +219,7 @@ const skillsData = {
 };
 
 // =========================================
-// 5. GLOBAIS DE MODAL (ABRIR POP-UP AO CLICAR EM QUALQUER TECNOLOGIA)
-// =========================================
-const skillModal = document.getElementById('skill-modal');
-const closeModalBtn = document.getElementById('close-modal');
-const modalIcon = document.getElementById('modal-icon');
-const modalTitle = document.getElementById('modal-title');
-const modalDesc = document.getElementById('modal-desc');
-
-document.addEventListener('click', (e) => {
-    const skillTarget = e.target.closest('[data-skill]');
-    if (skillTarget) {
-        const skillId = skillTarget.getAttribute('data-skill');
-        const data = skillsData[skillId];
-        if (data && skillModal) {
-            modalIcon.innerHTML = data.icon;
-            modalTitle.textContent = data.title;
-            modalDesc.innerHTML = data[currentLang] || data.pt; 
-            skillModal.classList.add('active');
-        }
-    }
-});
-
-if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', () => { if (skillModal) skillModal.classList.remove('active'); });
-}
-if (skillModal) {
-    skillModal.addEventListener('click', (e) => { if (e.target === skillModal) skillModal.classList.remove('active'); });
-}
-
-// =========================================
-// 6. DADOS DOS PROJETOS NA ÁRVORE (COM ATRIBUTOS DATA-SKILL PARA ABRIR O POP-UP)
+// 5. DADOS DOS PROJETOS NA ÁRVORE
 // =========================================
 const projectsTreeData = {
     horizon: [
@@ -376,7 +351,7 @@ function renderAllTrees() {
 }
 
 // =========================================
-// 7. DELEGAÇÃO GLOBAL PARA EXPANSÃO DOS PROJETOS (ACORDEÃO)
+// 6. DELEGAÇÃO GLOBAL PARA EXPANSÃO DOS PROJETOS (ACORDEÃO)
 // =========================================
 document.addEventListener('click', (e) => {
     const accordionHeader = e.target.closest('.accordion-header');
@@ -389,9 +364,38 @@ document.addEventListener('click', (e) => {
 });
 
 // =========================================
+// 7. MODAL DE SKILLS / POP-UP DE TECNOLOGIAS
+// =========================================
+const skillModal = document.getElementById('skill-modal');
+const closeModalBtn = document.getElementById('close-modal');
+const modalIcon = document.getElementById('modal-icon');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-desc');
+
+document.addEventListener('click', (e) => {
+    const skillTarget = e.target.closest('[data-skill]');
+    if (skillTarget) {
+        const skillId = skillTarget.getAttribute('data-skill');
+        const data = skillsData[skillId];
+        if (data && skillModal) {
+            modalIcon.innerHTML = data.icon;
+            modalTitle.textContent = data.title;
+            modalDesc.innerHTML = data[currentLang] || data.pt; 
+            skillModal.classList.add('active');
+        }
+    }
+});
+
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', () => { if (skillModal) skillModal.classList.remove('active'); });
+}
+if (skillModal) {
+    skillModal.addEventListener('click', (e) => { if (e.target === skillModal) skillModal.classList.remove('active'); });
+}
+
+// =========================================
 // 8. IDIOMAS E TRADUÇÃO (PT / EN)
 // =========================================
-let currentLang = 'pt';
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
@@ -533,6 +537,7 @@ function initVisitCounters() {
         });
 }
 
+// Inicializações finais imediatas
 initVisitCounters();
 updateUptime();
 renderAllTrees();
