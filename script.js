@@ -268,8 +268,8 @@ const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
 function updateVisitCountersText() {
-    const personal = localStorage.getItem('rafael_portfolio_personal_visits') || 1;
-    const total = localStorage.getItem('rafael_portfolio_total_visits') || personal;
+    let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
+    let total = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || personal;
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -345,7 +345,7 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. CONTADOR DE TEMPO DE ATUALIZAÇÃO
+// 9. CONTADOR DE TEMPO DE ATUALIZAÇÃO (UPTIME)
 // =========================================
 let secondsElapsed = parseInt(sessionStorage.getItem('portfolio_uptime')) || 0;
 
@@ -379,35 +379,24 @@ function updateUptime() {
     }
 }
 
+// Inicia o relógio imediatamente e depois a cada 1 segundo
+updateUptime();
 setInterval(updateUptime, 1000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS REAL
+// 10. CONTADOR DE VISITAS LOCAL SEGURO
 // =========================================
 function initVisitCounters() {
-    let personalVisits = localStorage.getItem('rafael_portfolio_personal_visits');
-    if (!personalVisits) {
-        personalVisits = 1;
-    } else {
-        personalVisits = parseInt(personalVisits) + 1;
-    }
-    localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
+    let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
+    let totalVisits = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || 0;
 
-    fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
-        .then(response => response.json())
-        .then(data => {
-            let totalVisits = data && data.count ? data.count : personalVisits;
-            localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
-            updateVisitCountersText();
-        })
-        .catch(() => {
-            let totalVisits = localStorage.getItem('rafael_portfolio_total_visits');
-            if (!totalVisits) {
-                totalVisits = personalVisits;
-            }
-            updateVisitCountersText();
-        });
+    personalVisits++;
+    totalVisits++;
+
+    localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
+    localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
+
+    updateVisitCountersText();
 }
 
 initVisitCounters();
-updateUptime();
