@@ -129,7 +129,7 @@ img { display: block; max-width: 100%; }
 .btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--text) !important; box-shadow: none; }
 .btn-outline:hover { background: var(--btn-hover-bg); }
 
-/* HERO IMAGE & MOBILE/DESKTOP AVATAR SWITCH */
+/* HERO IMAGE & PC/MOBILE AVATAR CONTROLS */
 .mobile-avatar { display: none; }
 .desktop-avatar { display: flex; justify-content: center; }
 
@@ -503,7 +503,7 @@ footer {
 #modal-icon { font-size: 3.5rem; margin-bottom: 15px; }
 #modal-title { margin-bottom: 10px; font-size: 1.5rem; }
 
-/* MEDIA QUERY PARA MOBILE: EXIBE A FOTO LOGO ABAIXO DO NOME E OCULTA A ANTIGA */
+/* MEDIA QUERY PARA MOBILE E DESKTOP */
 @media(max-width: 992px) {
   .hero-container { 
     display: flex;
@@ -520,8 +520,8 @@ footer {
     margin: 20px 0;
   }
   .mobile-avatar .image-box {
-    width: 240px;
-    height: 240px;
+    width: 220px;
+    height: 220px;
   }
 
   .desktop-avatar {
