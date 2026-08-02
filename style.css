@@ -152,7 +152,6 @@ img { display: block; max-width: 100%; }
 .section { padding: 100px 0; }
 .section h2 { font-size: 2rem; margin-bottom: 10px; color: var(--text-title); font-family: var(--font-code); }
 .section h2::before { content: '>'; color: var(--accent); margin-right: 10px; }
-.section-subtitle { color: var(--muted); margin-bottom: 40px; font-size: 0.95rem; font-family: var(--font-code); }
 
 /* TERMINAL CARD & SKILLS */
 .terminal-card {
@@ -196,6 +195,7 @@ img { display: block; max-width: 100%; }
 .master-tree-container {
   position: relative;
   padding-left: 35px;
+  margin-top: 30px;
 }
 
 .master-tree-line {
