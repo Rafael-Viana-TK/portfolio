@@ -129,8 +129,10 @@ img { display: block; max-width: 100%; }
 .btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--text) !important; box-shadow: none; }
 .btn-outline:hover { background: var(--btn-hover-bg); }
 
-/* HERO IMAGE */
-.hero-image { display: flex; justify-content: center; }
+/* HERO IMAGE & MOBILE/DESKTOP AVATAR SWITCH */
+.mobile-avatar { display: none; }
+.desktop-avatar { display: flex; justify-content: center; }
+
 .image-box {
   width: 340px; height: 340px; border-radius: 50%; position: relative;
   display: flex; justify-content: center; align-items: center; overflow: hidden;
@@ -371,7 +373,6 @@ img { display: block; max-width: 100%; }
   font-size: 1.4rem;
 }
 
-/* ÍCONES DE TECNOLOGIA CLICÁVEIS DENTRO DA ÁRVORE DE PROJETOS */
 .node-techs [data-skill] {
   cursor: pointer;
   transition: transform 0.2s ease, filter 0.2s ease;
@@ -404,10 +405,7 @@ footer {
   gap: 20px;
 }
 
-.footer-left {
-  display: flex;
-  align-items: center;
-}
+.footer-left { display: flex; align-items: center; }
 
 .footer-contact-links {
   display: flex;
@@ -457,9 +455,7 @@ footer {
   opacity: 0.95;
 }
 
-.footer-center {
-  text-align: center;
-}
+.footer-center { text-align: center; }
 
 .footer-copy {
   font-size: 0.95rem;
@@ -467,9 +463,7 @@ footer {
   font-weight: 600;
 }
 
-.footer-right {
-  text-align: right;
-}
+.footer-right { text-align: right; }
 
 .footer-stats {
   font-size: 0.75rem;
@@ -477,9 +471,7 @@ footer {
   line-height: 1.4;
 }
 
-.footer-stats:hover {
-  opacity: 1;
-}
+.footer-stats:hover { opacity: 1; }
 
 .scroll { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; color: var(--muted); }
 .cursor { animation: blink 1s step-end infinite; color: var(--accent); }
@@ -511,16 +503,31 @@ footer {
 #modal-icon { font-size: 3.5rem; margin-bottom: 15px; }
 #modal-title { margin-bottom: 10px; font-size: 1.5rem; }
 
+/* MEDIA QUERY PARA MOBILE: EXIBE A FOTO LOGO ABAIXO DO NOME E OCULTA A ANTIGA */
 @media(max-width: 992px) {
   .hero-container { 
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 40px;
     text-align: center; 
   }
   .hero p { margin: 0 auto 20px; }
   .hero-buttons { justify-content: center; }
-  .image-box { margin: 0 auto; width: 280px; height: 280px; }
+  
+  .mobile-avatar {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .mobile-avatar .image-box {
+    width: 240px;
+    height: 240px;
+  }
+
+  .desktop-avatar {
+    display: none;
+  }
+
   .menu { display: none; }
 }
 
