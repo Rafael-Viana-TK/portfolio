@@ -267,11 +267,11 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-let globalVisitsCache = 1;
+let globalVisitsCache = 245; // Base global inicial simulada caso a API externe instabilidade
 
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (globalVisitsCache > personal ? globalVisitsCache : personal + 100);
+    let total = parseInt(localStorage.getItem('rafael_portfolio_total_global')) || (globalVisitsCache + personal);
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -303,7 +303,8 @@ function setLanguage(lang, saveUserChoice = false) {
     }
 
     updateVisitCountersText();
-    
+    updateDeployUptime();
+
     if (btnEn && btnPt) {
         if (lang === 'en') {
             btnEn.classList.add('active');
@@ -346,12 +347,15 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 9. TEMPO AUTOMÁTICO VIA API DO GITHUB (COMMITS)
+// 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (CONTROLADO POR DEPLOY)
 // =========================================
-function calculateTimeAgo(dateString) {
+// -> Altere apenas esta data/hora no formato 'YYYY-MM-DDTHH:mm:ss' sempre que subir um update novo para o GitHub:
+const ADMIN_DEPLOY_TIMESTAMP = '2026-08-02T05:30:00';
+
+function updateDeployUptime() {
     const now = new Date();
-    const past = new Date(dateString);
-    let diffMs = now - past;
+    const deployDate = new Date(ADMIN_DEPLOY_TIMESTAMP);
+    let diffMs = now - deployDate;
     if (diffMs < 0) diffMs = 0;
     
     const diffSecs = Math.floor(diffMs / 1000);
@@ -388,40 +392,22 @@ function calculateTimeAgo(dateString) {
     }
 }
 
-function initAutomaticUptime() {
-    // Tenta puxar a data do último commit direto do repositório GitHub
-    fetch('https://api.github.com/repos/Rafael-Viana-TK/Rafael-Viana-TK.github.io/commits?per_page=1')
-        .then(res => res.json())
-        .then(data => {
-            if (data && data[0] && data[0].commit && data[0].commit.committer) {
-                const commitDate = data[0].commit.committer.date;
-                calculateTimeAgo(commitDate);
-            } else {
-                throw new Error();
-            }
-        })
-        .catch(() => {
-            // Fallback caso a API do GitHub demore ou bloqueie: usa a data de modificação interna
-            calculateTimeAgo(document.lastModified);
-        });
-}
-
-initAutomaticUptime();
-setInterval(initAutomaticUptime, 60000); // Atualiza a cada 1 minuto
+updateDeployUptime();
+setInterval(updateDeployUptime, 30000);
 
 // =========================================
-// 10. CONTADOR DE VISITAS AUTOMÁTICO COM AUTO-INICIALIZAÇÃO
+// 10. CONTADOR DE VISITAS SEPARADO (PESSOAL + GLOBAL REAL)
 // =========================================
 function initVisitCounters() {
+    // Conta apenas as entradas deste aparelho específico
     let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Tenta incrementar na API CounterAPI
+    // Puxa e incrementa o total global unificado de todos os usuários
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
         .then(response => {
             if (!response.ok) {
-                // Se o contador não existir no servidor, cria automaticamente via PUT
                 return fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio', { method: 'PUT' })
                     .then(() => fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up').then(r => r.json()));
             }
@@ -430,15 +416,13 @@ function initVisitCounters() {
         .then(data => {
             if (data && data.count) {
                 globalVisitsCache = data.count;
-                let totalVisits = globalVisitsCache > personalVisits ? globalVisitsCache : personalVisits;
-                localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
+                localStorage.setItem('rafael_portfolio_total_global', globalVisitsCache);
             }
             updateVisitCountersText();
         })
         .catch(() => {
-            let totalVisits = parseInt(localStorage.getItem('rafael_portfolio_total_visits')) || (personalVisits + 100);
-            globalVisitsCache = totalVisits;
-            localStorage.setItem('rafael_portfolio_total_visits', totalVisits);
+            let savedTotal = parseInt(localStorage.getItem('rafael_portfolio_total_global')) || (globalVisitsCache + personalVisits);
+            localStorage.setItem('rafael_portfolio_total_global', savedTotal);
             updateVisitCountersText();
         });
 }
