@@ -1,5 +1,5 @@
 // =========================================
-// 0. VARIÁVEL DE IDIOMA GLOBAL (DEFINIDA PRIMEIRO)
+// 0. VARIÁVEL DE IDIOMA GLOBAL
 // =========================================
 let currentLang = 'pt';
 
@@ -219,139 +219,7 @@ const skillsData = {
 };
 
 // =========================================
-// 5. DADOS DOS PROJETOS NA ÁRVORE
-// =========================================
-const projectsTreeData = {
-    horizon: [
-        {
-            generation: "Geração 01 — Raiz & Autoria",
-            techs: "<i class='fab fa-js' data-skill='js' style='color:#f7df1e;' title='JavaScript'></i> <i class='fas fa-database' data-skill='sql' style='color:#4479a1;' title='SQL'></i>",
-            pt: "Servidor de FiveM construído inteiramente do zero com autoria própria, estabelecendo a base de sincronização e economia.",
-            en: "FiveM server built entirely from scratch with own authorship, establishing the base for synchronization and economy."
-        },
-        {
-            generation: "Geração 02 — Ramo de Scripts (@AMOR1M)",
-            techs: "<i class='fab fa-js' data-skill='js' style='color:#f7df1e;' title='JavaScript'></i> <i class='fab fa-node-js' data-skill='node' style='color:#339933;' title='Node.js'></i>",
-            pt: "Implementação de sistemas avançados e otimização de scripts em conjunto com @AMOR1M para garantir fluidez.",
-            en: "Implementation of advanced systems and script optimization alongside @AMOR1M to ensure smooth gameplay."
-        },
-        {
-            generation: "Geração 03 — Ramo de Mapas (@C0STA)",
-            techs: "<i class='fa-solid fa-map' data-skill='map' style='color:#ff5722;' title='Mapas'></i>",
-            pt: "Moldagem de mapas e ambientação personalizada sob a responsabilidade de @C0STA, elevando a imersão visual.",
-            en: "Map modeling and custom environment design under @C0STA's responsibility, elevating visual immersion."
-        },
-        {
-            generation: "Geração 04 — Ramo Visual & UI (@M0RRET1M & @LENNON)",
-            techs: "<i class='fab fa-react' data-skill='react' style='color:#61dafb;' title='React'></i> <i class='fa-solid fa-palette' data-skill='palette' style='color:#e34f26;' title='UI/UX'></i>",
-            pt: "Criação de UI/UX, interfaces customizadas e design gráfico completo conduzido por @M0RRET1M e @LENNON.",
-            en: "Creation of UI/UX, custom interfaces, and complete graphic design led by @M0RRET1M and @LENNON."
-        }
-    ],
-    bot: [
-        {
-            generation: "Geração 01 — Núcleo & Arquitetura",
-            techs: "<i class='fab fa-node-js' data-skill='node' style='color:#339933;' title='Node.js'></i> <i class='fab fa-js' data-skill='js' style='color:#f7df1e;' title='JavaScript'></i>",
-            pt: "Estruturação inicial do bot em Node.js para gerenciar eventos assíncronos e conexões seguras com o Discord.",
-            en: "Initial bot structuring in Node.js to manage asynchronous events and secure connections with Discord."
-        },
-        {
-            generation: "Geração 02 — Ramificação de Bate-Ponto",
-            techs: "<i class='fas fa-database' data-skill='sql' style='color:#4479a1;' title='SQL'></i> <i class='fa-solid fa-clock' data-skill='clock' style='color:#27c93f;' title='Automação de Ponto'></i>",
-            pt: "Automação completa de ponto para equipe, registrando entradas, saídas e jornadas direto no banco de dados.",
-            en: "Complete automated time tracking for the team, logging entries, exits, and shifts directly in the database."
-        },
-        {
-            generation: "Geração 03 — Ramificação de Tickets Ágeis",
-            techs: "<i class='fa-solid fa-ticket' data-skill='ticket' style='color:#ff5722;' title='Ticket System'></i> <i class='fab fa-github' data-skill='github' style='color:#fff;' title='GitHub'></i>",
-            pt: "Implementação de sistema inteligente que delega quase toda a moderação e suporte para painéis interativos.",
-            en: "Implementation of an intelligent system that delegates almost all moderation and support to interactive panels."
-        }
-    ],
-    rm_v1: [
-        {
-            generation: "Geração 01 — Autenticação & Segurança",
-            techs: "<i class='fab fa-node-js' data-skill='node' style='color:#339933;' title='Node.js'></i> <i class='fas fa-key' data-skill='key' style='color:#ffbd2e;' title='Autenticação'></i>",
-            pt: "Desenvolvimento do sistema robusto de login, controle de sessões e gerenciamento seguro de keys de acesso para clientes.",
-            en: "Development of a robust login system, session control, and secure access key management for clients."
-        },
-        {
-            generation: "Geração 02 — Motor de Busca Geográfica",
-            techs: "<i class='fas fa-database' data-skill='sql' style='color:#4479a1;' title='SQL'></i> <i class='fab fa-js' data-skill='js' style='color:#f7df1e;' title='JavaScript'></i>",
-            pt: "Construção de rotas de consulta rápida por região para localizar empresas e CPFs com alta performance.",
-            en: "Construction of fast regional query routes to locate companies and CPFs with high performance."
-        },
-        {
-            generation: "Geração 03 — Painel de Dados Empresariais",
-            techs: "<i class='fab fa-react' data-skill='react' style='color:#61dafb;' title='React'></i> <i class='fab fa-css3-alt' data-skill='css' style='color:#1572b6;' title='CSS3'></i>",
-            pt: "Interface limpa exibindo dados detalhados como proprietário, site, endereço, contatos e porte empresarial em segundos.",
-            en: "Clean interface displaying detailed data such as owner, website, address, contacts, and company size in seconds."
-        }
-    ],
-    portfolio: [
-        {
-            generation: "Geração 01 — Tronco Conceitual",
-            techs: "<i class='fab fa-html5' data-skill='html' style='color:#e34f26;' title='HTML5'></i> <i class='fab fa-css3-alt' data-skill='css' style='color:#1572b6;' title='CSS3'></i>",
-            pt: "Idealização de um design moderno estilo cyberpunk/terminal com modo dia/noite dinâmico.",
-            en: "Conceptualization of a modern cyberpunk/terminal style design with dynamic day/night mode."
-        },
-        {
-            generation: "Geração 02 — Ramo de Interatividade & Canvas",
-            techs: "<i class='fab fa-js' data-skill='js' style='color:#f7df1e;' title='JavaScript'></i> <i class='fa-solid fa-cube' data-skill='js' style='color:#ff5722;' title='Canvas/JS'></i>",
-            pt: "Implementação do canvas de cubos interconectados no fundo e pop-ups dinâmicos de tecnologias.",
-            en: "Implementation of the interconnected cubes background canvas and dynamic tech pop-ups."
-        },
-        {
-            generation: "Geração 03 — Ramo de Árvore Genealógica & Idiomas",
-            techs: "<i class='fab fa-react' data-skill='react' style='color:#61dafb;' title='React'></i> <i class='fa-solid fa-code-branch' data-skill='git' style='color:#3b82f6;' title='Git/Branches'></i>",
-            pt: "Evolução para visualização em árvore genealógica inline na página e suporte multilíngue dinâmico.",
-            en: "Evolution to inline genealogical tree visualization on the page and dynamic multilingual support."
-        }
-    ],
-    rm_comercial: [
-        {
-            generation: "Geração 01 — Cadastro & Nota Fiscal",
-            techs: "<i class='fas fa-file-invoice-dollar' data-skill='invoice' style='color:#ffbd2e;' title='Nota Fiscal'></i> <i class='fas fa-database' data-skill='sql' style='color:#4479a1;' title='SQL'></i>",
-            pt: "Módulo de recebimento e envio de dados de produtos, permitindo cadastrar produtos no sistema automaticamente direto pela nota fiscal.",
-            en: "Module for receiving and sending product data, allowing automatic product registration into the system directly via invoice."
-        },
-        {
-            generation: "Geração 02 — Vendas & Orçamentos",
-            techs: "<i class='fas fa-cash-register' data-skill='cash' style='color:#27c93f;' title='Frente de Caixa'></i> <i class='fab fa-js' data-skill='js' style='color:#f7df1e;' title='JavaScript'></i>",
-            pt: "Estruturação completa do fluxo de atendimento ao cliente, realizando vendas ágeis e emissão de orçamentos detalhados.",
-            en: "Complete structuring of the customer service flow, performing agile sales and issuing detailed quotes."
-        },
-        {
-            generation: "Geração 03 — Gestão de Caixa & PIX",
-            techs: "<i class='fas fa-wallet' data-skill='wallet' style='color:#ff5722;' title='Financeiro/Pix'></i> <i class='fas fa-qrcode' data-skill='wallet' style='color:#61dafb;' title='QR Code Pix'></i>",
-            pt: "Controle financeiro integrado de loja: funções de caixa, abertura, sangria e saque PIX, cobrindo todo o processo operacional de vendas.",
-            en: "Integrated store financial control: cash register functions, opening, cash-out (sangria), and PIX withdrawal, covering the entire sales operational process."
-        }
-    ]
-};
-
-function renderAllTrees() {
-    for (const [key, nodes] of Object.entries(projectsTreeData)) {
-        const container = document.getElementById(`tree-${key}`);
-        if (!container) continue;
-        
-        let htmlContent = '';
-        nodes.forEach(node => {
-            let descText = (currentLang === 'pt') ? node.pt : node.en;
-            htmlContent += `
-                <div class="tree-node">
-                    <div class="node-generation">${node.generation}</div>
-                    <div class="node-techs">${node.techs}</div>
-                    <div class="node-desc">${descText}</div>
-                </div>
-            `;
-        });
-        container.innerHTML = htmlContent;
-    }
-}
-
-// =========================================
-// 6. DELEGAÇÃO GLOBAL PARA EXPANSÃO DOS PROJETOS (ACORDEÃO)
+// 5. DELEGAÇÃO GLOBAL PARA EXPANSÃO DOS PROJETOS (ACORDEÃO)
 // =========================================
 document.addEventListener('click', (e) => {
     const accordionHeader = e.target.closest('.accordion-header');
@@ -364,7 +232,7 @@ document.addEventListener('click', (e) => {
 });
 
 // =========================================
-// 7. MODAL DE SKILLS / POP-UP DE TECNOLOGIAS
+// 6. MODAL DE SKILLS / POP-UP DE TECNOLOGIAS
 // =========================================
 const skillModal = document.getElementById('skill-modal');
 const closeModalBtn = document.getElementById('close-modal');
@@ -394,7 +262,7 @@ if (skillModal) {
 }
 
 // =========================================
-// 8. IDIOMAS E TRADUÇÃO (PT / EN)
+// 7. IDIOMAS E TRADUÇÃO (PT / EN)
 // =========================================
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
@@ -421,6 +289,11 @@ function setLanguage(lang, saveUserChoice = false) {
             el.innerHTML = el.getAttribute(`data-${lang}`);
         }
     });
+
+    document.querySelectorAll('.node-desc').forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) el.textContent = text;
+    });
     
     textToType = (lang === 'pt') ? "Desenvolvedor de Software" : "Software Developer";
     if (isTypingFinished && typingElement) {
@@ -429,7 +302,6 @@ function setLanguage(lang, saveUserChoice = false) {
 
     updateVisitCountersText();
     updateUptime();
-    renderAllTrees();
 
     if (btnEn && btnPt) {
         if (lang === 'en') {
@@ -462,7 +334,7 @@ if (savedUserLang) {
 }
 
 // =========================================
-// 9. SCROLL E LINHA PONTILHADA
+// 8. SCROLL E LINHA PONTILHADA
 // =========================================
 window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
@@ -473,7 +345,7 @@ window.addEventListener('scroll', () => {
 });
 
 // =========================================
-// 10. CONTADOR DE TEMPO DE ATUALIZAÇÃO
+// 9. CONTADOR DE TEMPO DE ATUALIZAÇÃO
 // =========================================
 let secondsElapsed = parseInt(sessionStorage.getItem('portfolio_uptime')) || 0;
 
@@ -510,7 +382,7 @@ function updateUptime() {
 setInterval(updateUptime, 1000);
 
 // =========================================
-// 11. CONTADOR DE VISITAS REAL
+// 10. CONTADOR DE VISITAS REAL
 // =========================================
 function initVisitCounters() {
     let personalVisits = localStorage.getItem('rafael_portfolio_personal_visits');
@@ -537,7 +409,5 @@ function initVisitCounters() {
         });
 }
 
-// Inicializações finais imediatas
 initVisitCounters();
 updateUptime();
-renderAllTrees();
