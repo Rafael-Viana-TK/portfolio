@@ -493,6 +493,23 @@ footer {
 
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
+@keyframes visit-spin { to { transform: rotate(360deg); } }
+
+.visit-loader {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin: 0 0.15em;
+  vertical-align: -0.08em;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: visit-spin 0.75s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visit-loader { animation-duration: 1.5s; }
+}
 
 /* MODAL DE SKILLS */
 .modal-overlay {

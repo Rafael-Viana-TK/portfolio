@@ -267,11 +267,12 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-let globalServerVisits = parseInt(localStorage.getItem('rafael_portfolio_last_global_total')) || 0;
+let globalServerVisits = null;
 
 function updateVisitCountersText() {
-    let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
-    let total = globalServerVisits;
+    const personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits_v2')) || 1;
+    const loadingLabel = currentLang === 'pt' ? 'Carregando visitas totais' : 'Loading total visits';
+    const total = globalServerVisits ?? `<span class="visit-loader" role="status" aria-label="${loadingLabel}"></span>`;
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
@@ -432,16 +433,15 @@ setInterval(updateDeployUptime, 30000);
 // 10. CONTADOR DE VISITAS GLOBAL VIA API BLINDADA
 // =========================================
 function initVisitCounters() {
-    // Conta quantas vezes ESTE navegador entrou especificamente
-    let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 0;
+    // Conta quantas vezes ESTE navegador entrou desde a sincronização do contador global.
+    let personalVisits = parseInt(localStorage.getItem('rafael_portfolio_personal_visits_v2')) || 0;
     personalVisits++;
-    localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
+    localStorage.setItem('rafael_portfolio_personal_visits_v2', personalVisits);
 
-    const lastKnownTotal = parseInt(localStorage.getItem('rafael_portfolio_last_global_total')) || 0;
-    globalServerVisits = lastKnownTotal;
+    globalServerVisits = null;
     updateVisitCountersText();
 
-    // Incrementa uma visualização no contador público compartilhado.
+    // Incrementa uma única vez neste carregamento.
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
         .then(response => {
             if (!response.ok) throw new Error(`CounterAPI: ${response.status}`);
@@ -451,19 +451,44 @@ function initVisitCounters() {
             const serverTotal = Number(data?.count ?? data?.value ?? 0);
             if (!Number.isFinite(serverTotal) || serverTotal < 1) throw new Error('Contagem inválida');
 
-            // Não deixa o número exibido regredir neste navegador.
-            globalServerVisits = Math.max(serverTotal, lastKnownTotal);
-            localStorage.setItem('rafael_portfolio_last_global_total', globalServerVisits);
+            globalServerVisits = serverTotal;
             updateVisitCountersText();
         })
         .catch(() => {
-            // Se o serviço cair, mantém o último total real conhecido sem inventar visitas.
-            globalServerVisits = lastKnownTotal;
-            updateVisitCountersText();
+            // Uma nova leitura não incrementa o contador e evita duplicidade.
+            scheduleGlobalCounterSync();
         });
 }
 
+async function syncGlobalCounter() {
+    try {
+        const response = await fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio', {
+            cache: 'no-store'
+        });
+        if (!response.ok) throw new Error(`CounterAPI: ${response.status}`);
+
+        const data = await response.json();
+        const serverTotal = Number(data?.count ?? data?.value ?? 0);
+        if (!Number.isFinite(serverTotal) || serverTotal < 1) throw new Error('Contagem inválida');
+
+        globalServerVisits = serverTotal;
+        updateVisitCountersText();
+        return true;
+    } catch (error) {
+        globalServerVisits = null;
+        updateVisitCountersText();
+        return false;
+    }
+}
+
+function scheduleGlobalCounterSync() {
+    [3000, 10000, 30000].forEach(delay => {
+        setTimeout(syncGlobalCounter, delay);
+    });
+}
+
 initVisitCounters();
+setInterval(syncGlobalCounter, 60000);
 
 // =========================================
 // 11. MODAL DO CURRÍCULO
