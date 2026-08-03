@@ -121,7 +121,8 @@ img { display: block; max-width: 100%; }
 
 .resume-button {
   margin-top: 14px;
-  min-width: 178px;
+  width: 285px;
+  max-width: 100%;
   justify-content: center;
   border: 0;
   cursor: pointer;

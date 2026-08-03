@@ -323,6 +323,9 @@ function setLanguage(lang, saveUserChoice = false) {
 if (btnPt) btnPt.addEventListener('click', () => setLanguage('pt', true));
 if (btnEn) btnEn.addEventListener('click', () => setLanguage('en', true));
 
+// Precisa existir antes da seleção inicial de idioma, que atualiza esse texto.
+const ADMIN_DEPLOY_DATE = new Date(2026, 7, 2, 5, 30, 0);
+
 const savedUserLang = localStorage.getItem('rafael_portfolio_user_lang');
 if (savedUserLang) {
     setLanguage(savedUserLang, false);
@@ -349,9 +352,6 @@ window.addEventListener('scroll', () => {
 // =========================================
 // 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (FORMATO NUMÉRICO BLINDADO)
 // =========================================
-// Mês é indexado em 0: 7 = Agosto. Data: 02/08/2026 às 05:30:00.
-const ADMIN_DEPLOY_DATE = new Date(2026, 7, 2, 5, 30, 0);
-
 function updateDeployUptime() {
     const now = new Date();
     let diffMs = now - ADMIN_DEPLOY_DATE;
