@@ -117,16 +117,31 @@ img { display: block; max-width: 100%; }
 .hero h2 { color: var(--muted); font-size: 1.5rem; font-weight: 400; height: 36px; margin-bottom: 25px; }
 .hero p { color: var(--muted); max-width: 500px; font-size: 1.05rem; }
 
-.hero-buttons { margin-top: 35px; display: flex; flex-wrap: wrap; gap: 16px; }
+.hero-buttons {
+  width: max-content;
+  max-width: 100%;
+  margin-top: 35px;
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  gap: 14px 16px;
+  align-items: stretch;
+}
+
+.hero-buttons > .btn { justify-content: center; }
 
 .resume-button {
-  margin-top: 14px;
-  width: 285px;
+  grid-column: 1 / 3;
+  width: 100%;
   max-width: 100%;
   justify-content: center;
   border: 0;
   cursor: pointer;
   font: inherit;
+}
+
+.email-button {
+  grid-column: 3;
+  width: 100%;
 }
 
 .btn {
@@ -636,8 +651,7 @@ body.resume-open { overflow: hidden; }
     text-align: center; 
   }
   .hero p { margin: 0 auto 20px; }
-  .hero-buttons { justify-content: center; }
-  .resume-button { margin-left: auto; margin-right: auto; }
+  .hero-buttons { margin-left: auto; margin-right: auto; }
   
   .mobile-avatar {
     display: flex;
@@ -676,6 +690,11 @@ body.resume-open { overflow: hidden; }
   .hero h1 { font-size: 2.5rem; }
   .section { padding: 60px 0; }
   .language { display: none; }
+  .hero-buttons { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-buttons > .btn { width: 100%; padding: 11px 10px; }
+  .hero-instagram { grid-column: 1; grid-row: 2; }
+  .email-button { grid-column: 2; grid-row: 2; }
+  .resume-button { grid-column: 1 / -1; grid-row: 3; }
   .resume-modal { padding: 0; }
   .resume-dialog { width: 100%; height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
   .resume-header { padding: 14px 16px; }
