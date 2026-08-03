@@ -271,7 +271,8 @@ let globalServerVisits = null;
 
 function updateVisitCountersText() {
     const personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits_v2')) || 1;
-    const total = globalServerVisits ?? '—';
+    const loadingLabel = currentLang === 'pt' ? 'Carregando visitas totais' : 'Loading total visits';
+    const total = globalServerVisits ?? `<span class="visit-loader" role="status" aria-label="${loadingLabel}"></span>`;
     
     const visitContainer = document.getElementById('visit-text-container');
     if (visitContainer) {
