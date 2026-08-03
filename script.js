@@ -267,7 +267,7 @@ if (skillModal) {
 const btnPt = document.getElementById('pt');
 const btnEn = document.getElementById('en');
 
-let globalServerVisits = 150; // Valor base seguro
+let globalServerVisits = parseInt(localStorage.getItem('rafael_portfolio_last_global_total')) || 0;
 
 function updateVisitCountersText() {
     let personal = parseInt(localStorage.getItem('rafael_portfolio_personal_visits')) || 1;
@@ -323,8 +323,7 @@ function setLanguage(lang, saveUserChoice = false) {
 if (btnPt) btnPt.addEventListener('click', () => setLanguage('pt', true));
 if (btnEn) btnEn.addEventListener('click', () => setLanguage('en', true));
 
-// Precisa existir antes da seleção inicial de idioma, que atualiza esse texto.
-const ADMIN_DEPLOY_DATE = new Date(2026, 7, 2, 5, 30, 0);
+let lastDeployDate = null;
 
 const savedUserLang = localStorage.getItem('rafael_portfolio_user_lang');
 if (savedUserLang) {
@@ -353,8 +352,18 @@ window.addEventListener('scroll', () => {
 // 9. TEMPO DA ÚLTIMA ATUALIZAÇÃO DO ADMIN (FORMATO NUMÉRICO BLINDADO)
 // =========================================
 function updateDeployUptime() {
+    const uptimeEl = document.getElementById('uptime-text');
+    if (!uptimeEl) return;
+
+    if (!lastDeployDate) {
+        uptimeEl.textContent = currentLang === 'pt'
+            ? 'Última atualização: consultando o GitHub...'
+            : 'Last update: checking GitHub...';
+        return;
+    }
+
     const now = new Date();
-    let diffMs = now - ADMIN_DEPLOY_DATE;
+    let diffMs = now - lastDeployDate;
     if (diffMs < 0) diffMs = 0;
     
     const diffSecs = Math.floor(diffMs / 1000);
@@ -381,17 +390,42 @@ function updateDeployUptime() {
         timeStringEn = `a few seconds ago`;
     }
 
-    const uptimeEl = document.getElementById('uptime-text');
-    if (uptimeEl) {
-        if (currentLang === 'pt') {
-            uptimeEl.textContent = `Última atualização: ${timeStringPt}`;
-        } else {
-            uptimeEl.textContent = `Last update: ${timeStringEn}`;
-        }
+    if (currentLang === 'pt') {
+        uptimeEl.textContent = `Última atualização: ${timeStringPt}`;
+    } else {
+        uptimeEl.textContent = `Last update: ${timeStringEn}`;
     }
 }
 
-updateDeployUptime();
+async function loadLastDeployDate() {
+    const cachedDate = localStorage.getItem('rafael_portfolio_last_commit_date');
+
+    try {
+        const response = await fetch(
+            'https://api.github.com/repos/Rafael-Viana-TK/portfolio/commits?sha=main&per_page=1',
+            { cache: 'no-store' }
+        );
+        if (!response.ok) throw new Error(`GitHub API: ${response.status}`);
+
+        const commits = await response.json();
+        const commitDate = commits?.[0]?.commit?.committer?.date;
+        if (!commitDate) throw new Error('Data do commit não encontrada');
+
+        lastDeployDate = new Date(commitDate);
+        localStorage.setItem('rafael_portfolio_last_commit_date', commitDate);
+    } catch (error) {
+        if (cachedDate) {
+            lastDeployDate = new Date(cachedDate);
+        } else {
+            const documentDate = new Date(document.lastModified);
+            if (!Number.isNaN(documentDate.getTime())) lastDeployDate = documentDate;
+        }
+    }
+
+    updateDeployUptime();
+}
+
+loadLastDeployDate();
 setInterval(updateDeployUptime, 30000);
 
 // =========================================
@@ -403,27 +437,28 @@ function initVisitCounters() {
     personalVisits++;
     localStorage.setItem('rafael_portfolio_personal_visits', personalVisits);
 
-    // Puxa e incrementa o total unificado do servidor global
+    const lastKnownTotal = parseInt(localStorage.getItem('rafael_portfolio_last_global_total')) || 0;
+    globalServerVisits = lastKnownTotal;
+    updateVisitCountersText();
+
+    // Incrementa uma visualização no contador público compartilhado.
     fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up')
         .then(response => {
-            if (!response.ok) {
-                return fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio', { method: 'PUT' })
-                    .then(() => fetch('https://api.counterapi.dev/v1/rafaelvianatk/portfolio/up').then(r => r.json()));
-            }
+            if (!response.ok) throw new Error(`CounterAPI: ${response.status}`);
             return response.json();
         })
         .then(data => {
-            if (data && data.count) {
-                globalServerVisits = data.count;
-            }
+            const serverTotal = Number(data?.count ?? data?.value ?? 0);
+            if (!Number.isFinite(serverTotal) || serverTotal < 1) throw new Error('Contagem inválida');
+
+            // Não deixa o número exibido regredir neste navegador.
+            globalServerVisits = Math.max(serverTotal, lastKnownTotal);
+            localStorage.setItem('rafael_portfolio_last_global_total', globalServerVisits);
             updateVisitCountersText();
         })
         .catch(() => {
-            // Fallback caso a API caia: usa o localStorage compartilhado de forma segura
-            let fallbackTotal = parseInt(localStorage.getItem('rafael_portfolio_fallback_total')) || 176;
-            fallbackTotal++;
-            localStorage.setItem('rafael_portfolio_fallback_total', fallbackTotal);
-            globalServerVisits = fallbackTotal;
+            // Se o serviço cair, mantém o último total real conhecido sem inventar visitas.
+            globalServerVisits = lastKnownTotal;
             updateVisitCountersText();
         });
 }
