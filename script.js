@@ -429,3 +429,55 @@ function initVisitCounters() {
 }
 
 initVisitCounters();
+
+// =========================================
+// 11. MODAL DO CURRÍCULO
+// =========================================
+const resumeModal = document.getElementById('resume-modal');
+const openResumeBtn = document.getElementById('open-resume');
+const closeResumeButtons = [
+    document.getElementById('close-resume-top'),
+    document.getElementById('close-resume')
+].filter(Boolean);
+const printResumeBtn = document.getElementById('print-resume');
+const resumeFrame = document.getElementById('resume-frame');
+let resumeLastFocus = null;
+
+function openResumeModal() {
+    if (!resumeModal) return;
+    resumeLastFocus = document.activeElement;
+    resumeModal.classList.add('active');
+    resumeModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('resume-open');
+    document.getElementById('close-resume-top')?.focus();
+}
+
+function closeResumeModal() {
+    if (!resumeModal) return;
+    resumeModal.classList.remove('active');
+    resumeModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('resume-open');
+    resumeLastFocus?.focus();
+}
+
+openResumeBtn?.addEventListener('click', openResumeModal);
+closeResumeButtons.forEach(button => button.addEventListener('click', closeResumeModal));
+
+resumeModal?.addEventListener('click', event => {
+    if (event.target === resumeModal) closeResumeModal();
+});
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && resumeModal?.classList.contains('active')) {
+        closeResumeModal();
+    }
+});
+
+printResumeBtn?.addEventListener('click', () => {
+    try {
+        resumeFrame?.contentWindow?.focus();
+        resumeFrame?.contentWindow?.print();
+    } catch (error) {
+        window.open('Rafael-Viana-Padilha-2026.pdf', '_blank', 'noopener');
+    }
+});
