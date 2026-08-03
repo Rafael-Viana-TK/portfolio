@@ -478,6 +478,6 @@ printResumeBtn?.addEventListener('click', () => {
         resumeFrame?.contentWindow?.focus();
         resumeFrame?.contentWindow?.print();
     } catch (error) {
-        window.open('Rafael-Viana-Padilha-2026.pdf', '_blank', 'noopener');
+        window.open('Rafael-Viana-Curriculo-2026.pdf', '_blank', 'noopener');
     }
 });
